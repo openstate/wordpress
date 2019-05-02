@@ -14,8 +14,8 @@ We use Docker to create Nginx, WordPress and MySQL containers.
 
   Note: `--delete` means that files on your pc not on the remote are deleted
   ```  
-  rsync -avzPh --delete Oxygen:/home/projects/wordpress/docker/docker-entrypoint-initdb.d/backup docker/docker-entrypoint-initdb.d/backup
-  rsync -avzPh --delete Oxygen:/home/projects/wordpress/wp-content wp-content
+  rsync -avzPh --delete Oxygen:/home/projects/wordpress/docker/docker-entrypoint-initdb.d/backup docker/docker-entrypoint-initdb.d
+  rsync -avzPh --delete Oxygen:/home/projects/wordpress/wp-content .
   ```
 - Custom plugins and themes can be cloned into their respective directories in `wp-content`
 - Copy `docker/ssmtp.conf.default` to `docker/ssmtp.conf` and fill in the values for `mailhub`, `AuthUser` and `AuthPass`
