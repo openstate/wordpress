@@ -47,7 +47,7 @@ We use Docker to create Nginx, WordPress and MySQL containers.
 
 - Retrieve the Nginx load balancer: http://github.com/openstate/nginx-load-balancer/
   - Follow the instructions to start Nginx load balancer
-  - Development: See section about mkcert in INSTALL_HTTPS.txt on how to obtain local certificates
+  - Development: see the section about mkcert in INSTALL_HTTPS.txt on how to obtain local certificates
   - Add the required website blocks in `nginx-load-balancer/docker/nginx/conf.d/default.conf`
   - run `./reload.sh` from `nginx-load-balancer/docker/`
 
@@ -84,8 +84,8 @@ To set the correct permissions run:
 ```
 cd ..
 sudo apt-get install acl
-setfacl -R -d -m group:coders:rw wordpress/
-chown -R www-data:coders wordpress/
+sudo setfacl -R -d -m group:coders:rw wordpress/
+sudo chown -R www-data:coders wordpress/
 sudo find wordpress/ -type d -exec chmod 775 {} +
 sudo find wordpress/ -type f -exec chmod 664 {} +
 ```
