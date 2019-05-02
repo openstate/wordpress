@@ -1,0 +1,22 @@
+version: '3.1'
+services:
+  nginx:
+    # Uncomment these ports when developing locally (unless you've
+    # also installed nginx-load-balancer locally)
+    #ports:
+    #  - "80:80"
+    #  - "443:443"
+    restart: "no"
+  app:
+    #environment:
+    #  WORDPRESS_DEBUG: 1
+    restart: "no"
+  mysql:
+    restart: "no"
+volumes:
+  volume:
+networks:
+  network:
+  nginx-load-balancer:
+    external:
+      name: docker_nginx-load-balancer

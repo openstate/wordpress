@@ -1,0 +1,6 @@
+FROM nginx:1.15.12-alpine
+MAINTAINER Open State Foundation <developers@openstate.eu>
+
+# Create the same user in the PHP-FPM and Nginx containers in order to connect via a socket
+RUN addgroup -g 3000 -S app
+RUN adduser -u 3000 -S -D -G app app

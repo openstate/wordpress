@@ -1,0 +1,9 @@
+#!/bin/bash
+MYSQL_CONTAINER="wordpress_mysql_1"
+DB_USER="<DB_USER>"
+DB_PASSWORD="<DB_PASSWORD>"
+NETWORK="wordpress_network"
+
+CMD="mysqldump -h $MYSQL_CONTAINER -u $DB_USER --password=$DB_PASSWORD --all-databases --ignore-table=mysql.event | gzip > /docker-entrypoint-initdb.d/backups/latest-mysqldump-daily.sql.gz ; \
+cp -p /docker-entrypoint-initdb.d/backups/latest-mysqldump-daily.sql.gz /docker-entrypoint-initdb.d/backups/`(date +%A)`-mysqldump-daily.sql.gz"
+docker run --rm --network $NETWORK -v `pwd`/docker-entrypoint-initdb.d/backups:/docker-entrypoint-initdb.d/backups:rw mysql bash -c "$CMD"

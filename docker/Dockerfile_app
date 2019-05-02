@@ -1,0 +1,41 @@
+FROM wordpress:5.1.1-php7.3-fpm
+MAINTAINER Open State Foundation <developers@openstate.eu>
+
+RUN echo "Europe/Amsterdam" > /etc/timezone \
+    && dpkg-reconfigure -f noninteractive tzdata
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales ssmtp
+
+RUN sed -i -e 's/# nl_NL.UTF-8 UTF-8/nl_NL.UTF-8 UTF-8/' /etc/locale.gen \
+    && dpkg-reconfigure --frontend=noninteractive locales
+
+# Note sure if this is needed as the PHP-FPM to Nginx communication over sockets also works without this
+RUN docker-php-ext-install sockets
+
+# Create the same user in the PHP-FPM and Nginx containers in order to connect via a socket
+RUN adduser --uid 3000 --system --group --disabled-login --disabled-password app
+
+ADD ssmtp.conf /etc/ssmtp/ssmtp.conf
+
+# Configure php-fpm to use sendmail and raise limits
+RUN printf '\nphp_admin_value[sendmail_path] = /usr/sbin/sendmail -t -i\n' >> /usr/local/etc/php-fpm.conf
+RUN sed -i 's/pm.max_children = 5/pm.max_children = 20/' /usr/local/etc/php-fpm.d/www.conf
+RUN sed -i 's/pm.start_servers = 2/pm.start_servers = 3/' /usr/local/etc/php-fpm.d/www.conf
+RUN sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 2/' /usr/local/etc/php-fpm.d/www.conf
+RUN sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 5/' /usr/local/etc/php-fpm.d/www.conf
+
+# Use socket instead of TCP
+RUN sed -i 's/listen = 127.0.0.1:9000/listen = \/socket\/docker.sock/' /usr/local/etc/php-fpm.d/www.conf
+RUN sed -i 's/;listen.owner = www-data/listen.owner = app/' /usr/local/etc/php-fpm.d/www.conf
+RUN sed -i 's/;listen.group = www-data/listen.group = app/' /usr/local/etc/php-fpm.d/www.conf
+# Comment this line as it overrides the socket back to TCP again
+RUN sed -i 's/listen = 9000/;listen = 9000/' /usr/local/etc/php-fpm.d/zz-docker.conf
+
+RUN echo 'upload_max_filesize = 200M' >> /usr/local/etc/php/php.ini
+RUN echo 'post_max_size = 200M' >> /usr/local/etc/php/php.ini
+
+# Debug
+#RUN sed -i '/error_log = \/proc\/self\/fd\/2/a log_level = debug' /usr/local/etc/php-fpm.conf
+#RUN sed -i '/access.log = \/proc\/self\/fd\/2/a php_admin_value[error_log] = /proc/self/fd/2' /usr/local/etc/php-fpm.conf
+#RUN sed -i '/access.log = \/proc\/self\/fd\/2/a php_flag[display_errors] = on' /usr/local/etc/php-fpm.conf
+#RUN sed -i '/access.log = \/proc\/self\/fd\/2/a php_admin_flag[log_errors] = on' /usr/local/etc/php-fpm.conf
