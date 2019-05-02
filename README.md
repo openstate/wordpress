@@ -19,13 +19,13 @@ We use Docker to create Nginx, WordPress and MySQL containers.
   ```
 - Custom plugins and themes can be cloned into their respective directories in `wp-content`
 - Copy `docker/ssmtp.conf.default` to `docker/ssmtp.conf` and fill in the values for `mailhub`, `AuthUser` and `AuthPass`
-- Copy `docker/backup.sh.default` to `docker/backup.sh`
-- In the `docker` directory create the files `secrets_db_name.txt` and `secrets_db_user.txt` and add the database name and database user (either new values if starting from scratch or existing if importing a database) on the first line of their corresponding file
+- In the `docker` directory create the files `secrets_db_name.txt`, `secrets_db_user.txt` and `secrets_db_password.txt` and add the database name, user and password (either new values if starting from scratch or existing if importing a database) on the first line of their corresponding file
+- Copy `docker/backup.sh.default` to `docker/backup.sh` and change `<DB_USER>` and `<DB_PASSWORD>` to the same values as filled in above
 - When importing an existing database (e.g. for local development or when migrating to another server)
   - Copy the latest MySQL backup from `docker/docker-entrypoint-initdb.d/backups` to `docker/docker-entrypoint-initdb.d` to import the database
-  - In the `docker` directory create the file `secrets_db_password.txt` and add the database password on the first line
-  - Edit `docker/backup.sh` and change `<DB_USER>` and `<DB_PASSWORD>` to their respective values
 - Production
+
+  NOTE: when you import a database it may take a few minutes before it is finished and thus before WordPress will connect successfully, see the logs
   ```
   cd docker
   docker-compose up -d
@@ -43,7 +43,7 @@ We use Docker to create Nginx, WordPress and MySQL containers.
   docker-compose -f docker-compose.yml -f docker-compose-dev.yml start
   ```
 - When you just installed without importing an existing database
-  - Run `docker-compose logs` and look for the line with 'GENERATED ROOT PASSWORD:' to find the randomly generated root database password and add it the `backup.sh` and `secrets_db_password.txt` files as show above
+  - Run `docker-compose logs` and look for the line with 'GENERATED ROOT PASSWORD:' to find the randomly generated root database password and save it somewhere safe
 
 - Retrieve the Nginx load balancer: http://github.com/openstate/nginx-load-balancer/
   - Follow the instructions to start Nginx load balancer
