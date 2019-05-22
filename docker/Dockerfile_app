@@ -4,10 +4,13 @@ MAINTAINER Open State Foundation <developers@openstate.eu>
 RUN echo "Europe/Amsterdam" > /etc/timezone \
     && dpkg-reconfigure -f noninteractive tzdata
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales ssmtp zip
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales ssmtp zip wget
 
 RUN sed -i -e 's/# nl_NL.UTF-8 UTF-8/nl_NL.UTF-8 UTF-8/' /etc/locale.gen \
     && dpkg-reconfigure --frontend=noninteractive locales
+
+# Install composer
+RUN cd /usr/local/bin/ && wget https://raw.githubusercontent.com/composer/getcomposer.org/5eb0614d3fa7130b363698d3dca52c619b463615/web/installer -O - -q | php -- && mv composer.phar composer
 
 # Note sure if this is needed as the PHP-FPM to Nginx communication over sockets also works without this
 RUN docker-php-ext-install sockets
