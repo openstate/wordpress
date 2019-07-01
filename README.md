@@ -36,6 +36,7 @@ We use Docker to create Nginx, WordPress and MySQL containers.
     - uncomment the lines containing `WORDPRESS_DEBUG` in `docker/docker-compose-dev.yml`
     - uncomment the debug sections in `Dockerfile_app`
     - in `docker/nginx/nginx.conf`, add `debug` to the end of the `error_log` statement in line 5
+    - see the 'Useful commands' section below to display PHP error messages on webpages
   
   NOTE: if you're developing on a Mac, edit the `sendfile` option in `docker/nginx/nginx.conf` as described there
   ```
@@ -47,7 +48,7 @@ We use Docker to create Nginx, WordPress and MySQL containers.
 
 - Retrieve the Nginx load balancer: http://github.com/openstate/nginx-load-balancer/
   - Follow the instructions to start Nginx load balancer
-  - Development: See section about mkcert in INSTALL_HTTPS.txt on how to obtain local certificates
+  - Development: see the section about mkcert in INSTALL_HTTPS.txt on how to obtain local certificates
   - Add the required website blocks in `nginx-load-balancer/docker/nginx/conf.d/default.conf`
   - run `./reload.sh` from `nginx-load-balancer/docker/`
 
@@ -84,8 +85,8 @@ To set the correct permissions run:
 ```
 cd ..
 sudo apt-get install acl
-setfacl -R -d -m group:coders:rw wordpress/
-chown -R www-data:coders wordpress/
+sudo setfacl -R -d -m group:coders:rwx wordpress/
+sudo chown -R www-data:coders wordpress/
 sudo find wordpress/ -type d -exec chmod 775 {} +
 sudo find wordpress/ -type f -exec chmod 664 {} +
 ```
@@ -110,6 +111,17 @@ sudo find wordpress/ -type f -exec chmod 664 {} +
   ```
   kill -USR2 <PID>
   ```
+
+- To display PHP error messages on webpages
+
+  Enter the `wordpress_app_1` container
+  ```
+  sed -i 's/;php_flag\[display_errors\] = off/php_flag[display_errors] = on/' /usr/local/etc/php-fpm.d/www.conf
+  kill -USR2 1
+  ```
+
+  To change it back
+  sed -i 's/php_flag\[display_errors\] = on/;php_flag[display_errors] = off/' /usr/local/etc/php-fpm.d/www.conf
 
 - To view all logs of all containers
   ```
