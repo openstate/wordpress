@@ -85,7 +85,7 @@ To set the correct permissions run:
 ```
 cd ..
 sudo apt-get install acl
-sudo setfacl -R -d -m group:coders:rw wordpress/
+sudo setfacl -R -d -m group:coders:rwx wordpress/
 sudo chown -R www-data:coders wordpress/
 sudo find wordpress/ -type d -exec chmod 775 {} +
 sudo find wordpress/ -type f -exec chmod 664 {} +
