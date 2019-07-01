@@ -134,4 +134,4 @@ by the ID of the container:
   mysql -h wordpress_mysql_1 -u <DB_USER> -p
   ```
   
-  Retrieve database password from `wordpress/docker/secrets_db_password.txt`
+  Retrieve DB_USER from `wordpress/docker/secrets_db_user.txt` and database password from `wordpress/docker/secrets_db_password.txt`
