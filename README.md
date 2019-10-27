@@ -37,6 +37,14 @@ We use Docker to create Nginx, WordPress and MySQL containers.
     - uncomment the debug sections in `Dockerfile_app`
     - in `docker/nginx/nginx.conf`, add `debug` to the end of the `error_log` statement in line 5
     - see the 'Useful commands' section below to display PHP error messages on webpages
+    - in the `worpress_app_1` container edit `wp-config.php` and replace `define( 'WP_DEBUG', false );` with the following lines (the output will be in `wp-content/debug.log`; really usefull to run every once in a while and visit all websites to find hidden errors and deprecations):
+
+      ```
+      define( 'WP_DEBUG', true );
+      define( 'WP_DEBUG_LOG', true );
+      define( 'WP_DEBUG_DISPLAY', false );
+      ```
+
   
   NOTE: if you're developing on a Mac, edit the `sendfile` option in `docker/nginx/nginx.conf` as described there
   ```
@@ -133,9 +141,18 @@ sudo find wordpress/ -type f -exec chmod 664 {} +
 by the ID of the container:
   ```
   /var/lib/docker/containers/dbeed771e6b44017b84c944fd0845679f682269df812046c2f3e4d97185a9312/dbeed771e6b44017b84c944fd0845679f682269df812046c2f3e4d97185a9312-json.log
-  ```
 
-- Updating one container, e.g. Nginx:
+NOTE NORMALLY YOU JUST UPDATE WORDPRESS VIA ITS WEBINTERFACE mu.openstate.eu/wp-admin INSTEAD OF USING ALL THE STEPS BELOW
+- Update WordPress version using Docker, first change the WordPress version in `Dockerfile_app`:
+  ```
+  docker-compose build app
+  docker-compose down
+  docker volume rm wordpress_app_volume
+  docker-compose up -d
+  ```
+  NB: `wordpress_app_volume` needs to be removed because the WordPress Docker image only regenerates its files (and thus its version) if it doesn't detect its files (which are the only files that are stored in this volume and is thus safe to remove)
+
+- Update one container, e.g. Nginx:
   ```
   docker-compose up -d --no-deps --build nginx
   ```
