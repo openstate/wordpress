@@ -4,7 +4,7 @@ MAINTAINER Open State Foundation <developers@openstate.eu>
 RUN echo "Europe/Amsterdam" > /etc/timezone \
     && dpkg-reconfigure -f noninteractive tzdata
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales ssmtp zip wget
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales msmtp msmtp-mta zip wget
 
 RUN sed -i -e 's/# nl_NL.UTF-8 UTF-8/nl_NL.UTF-8 UTF-8/' /etc/locale.gen \
     && dpkg-reconfigure --frontend=noninteractive locales
@@ -21,7 +21,7 @@ RUN docker-php-ext-install sockets
 # Create the same user in the PHP-FPM and Nginx containers in order to connect via a socket
 RUN adduser --uid 3000 --system --group --disabled-login --disabled-password app
 
-ADD ssmtp.conf /etc/ssmtp/ssmtp.conf
+ADD msmtprc /etc/msmtprc
 
 # Configure php-fpm to use sendmail and raise limits
 RUN printf '\nphp_admin_value[sendmail_path] = /usr/sbin/sendmail -t -i\n' >> /usr/local/etc/php-fpm.conf
