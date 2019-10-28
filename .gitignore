@@ -1,7 +1,8 @@
 docker/backup.sh
 docker/secrets_*.txt
-docker/ssmtp.conf
+docker/msmtprc
 docker/docker-entrypoint-initdb.d/*
 docker/nginx/conf.d/.htpasswd*
 wp-content/*
 log/*
+*.swp

@@ -37,6 +37,10 @@ services:
         define('PATH_CURRENT_SITE', '/');
         define('SITE_ID_CURRENT_SITE', 1);
         define('BLOG_ID_CURRENT_SITE', 1);
+        define('WPMS_ON', true);
+        define('WPMS_MAIL_FROM', 'developers@openstate.eu');
+        define('WPMS_MAIL_FROM_NAME', 'Open State Foundation developers');
+        define('WPMS_MAILER', 'mail');
     volumes:
       - app_volume:/var/www/html
       - ../wp-content/:/var/www/html/wp-content/

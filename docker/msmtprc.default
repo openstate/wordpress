@@ -1,0 +1,14 @@
+defaults
+auth on
+tls on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+
+account osf
+host 
+port 587
+from developers@openstate.eu
+user 
+password 
+
+# Set a default account
+account default : osf

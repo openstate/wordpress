@@ -18,7 +18,7 @@ We use Docker to create Nginx, WordPress and MySQL containers.
   rsync -avzPh --delete Oxygen:/home/projects/wordpress/wp-content .
   ```
 - Custom plugins and themes can be cloned into their respective directories in `wp-content`
-- Copy `docker/ssmtp.conf.default` to `docker/ssmtp.conf` and fill in the values for `mailhub`, `AuthUser` and `AuthPass`
+- Copy `docker/msmtprc.default` to `docker/msmtprc` and fill in the values for `host`, `user` and `password`
 - In the `docker` directory create the files `secrets_db_name.txt`, `secrets_db_user.txt` and `secrets_db_password.txt` and add the database name, user and password (either new values if starting from scratch or existing if importing a database) on the first line of their corresponding file
 - Copy `docker/backup.sh.default` to `docker/backup.sh` and change `<DB_USER>` and `<DB_PASSWORD>` to the same values as filled in above
 - When importing an existing database (e.g. for local development or when migrating to another server)
@@ -142,7 +142,7 @@ by the ID of the container:
   ```
   /var/lib/docker/containers/dbeed771e6b44017b84c944fd0845679f682269df812046c2f3e4d97185a9312/dbeed771e6b44017b84c944fd0845679f682269df812046c2f3e4d97185a9312-json.log
 
-NOTE NORMALLY YOU JUST UPDATE WORDPRESS VIA ITS WEBINTERFACE mu.openstate.eu/wp-admin INSTEAD OF USING ALL THE STEPS BELOW
+NOTE NORMALLY YOU JUST UPDATE WORDPRESS VIA ITS WEBINTERFACE mu.openstate.eu/wp-admin INSTEAD OF USING ALL THE STEPS BELOW. These steps are required though if you want to change `wp-config.php`.
 - Update WordPress version using Docker, first change the WordPress version in `Dockerfile_app`:
   ```
   docker-compose build app
