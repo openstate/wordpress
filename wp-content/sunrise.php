@@ -8,7 +8,7 @@ if ( defined( 'COOKIE_DOMAIN' ) ) {
 
 // let the site admin page catch the VHOST == 'no'
 $wpdb->dmtable = $wpdb->base_prefix . 'domain_mapping';
-$dm_domain = $wpdb->escape( $_SERVER[ 'HTTP_HOST' ] );
+$dm_domain = esc_sql( $_SERVER[ 'HTTP_HOST' ] );
 
 if( ( $nowww = preg_replace( '|^www\.|', '', $dm_domain ) ) != $dm_domain )
 	$where = $wpdb->prepare( 'domain IN (%s,%s)', $dm_domain, $nowww );
@@ -29,8 +29,8 @@ if( $domain_mapping_id ) {
 
 	$current_site = $wpdb->get_row( "SELECT * from {$wpdb->site} WHERE id = '{$current_blog->site_id}' LIMIT 0,1" );
 	$current_site->blog_id = $wpdb->get_var( "SELECT blog_id FROM {$wpdb->blogs} WHERE domain='{$current_site->domain}' AND path='{$current_site->path}'" );
-	if( function_exists( 'get_current_site_name' ) )
-		$current_site = get_current_site_name( $current_site );
+	if( function_exists( 'get_current_site' ) )
+		$current_site = get_current_site( $current_site );
 
 	define( 'DOMAIN_MAPPING', 1 );
 }
