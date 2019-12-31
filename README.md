@@ -37,7 +37,7 @@ We use Docker to create Nginx, WordPress and MySQL containers.
     - uncomment the debug sections in `Dockerfile_app`
     - in `docker/nginx/nginx.conf`, add `debug` to the end of the `error_log` statement in line 5
     - see the 'Useful commands' section below to display PHP error messages on webpages
-    - in the `worpress_app_1` container edit `wp-config.php` and replace `define( 'WP_DEBUG', false );` with the following lines (the output will be in `wp-content/debug.log`; really usefull to run every once in a while and visit all websites to find hidden errors and deprecations):
+    - in the `wordpress_app_1` container edit `wp-config.php` and replace `define( 'WP_DEBUG', false );` with the following lines (the output will be in `wp-content/debug.log`; really usefull to run every once in a while and visit all websites to find hidden errors and deprecations):
 
       ```
       define( 'WP_DEBUG', true );
