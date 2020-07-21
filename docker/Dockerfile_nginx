@@ -1,4 +1,4 @@
-FROM nginx:1.15.12-alpine
+FROM nginx:1-alpine
 MAINTAINER Open State Foundation <developers@openstate.eu>
 
 # Create the same user in the PHP-FPM and Nginx containers in order to connect via a socket

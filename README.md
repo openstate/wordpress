@@ -60,7 +60,7 @@ We use Docker to create Nginx, WordPress and MySQL containers.
   - Add the required website blocks in `nginx-load-balancer/docker/nginx/conf.d/default.conf`
   - run `./reload.sh` from `nginx-load-balancer/docker/`
 
-- Development: make sure to edit your `hosts` file and add the domains you want to load locally (replace the `X` with the IP address found using `docker inspect wordpress_nginx_1`):
+- Development: make sure to edit your `hosts` file and add the domains you want to load locally (replace the `X` with the IP address found using `docker inspect wordpress_nginx_1`)
   ```
   172.17.0.X  openstate.eu
   172.17.0.X  www.openstate.eu
@@ -138,26 +138,33 @@ sudo find wordpress/ -type f -exec chmod 664 {} +
   ```
 
 - The entire log file of a container can be found here, where the two long strings should be replaced
-by the ID of the container:
+by the ID of the container
   ```
   /var/lib/docker/containers/dbeed771e6b44017b84c944fd0845679f682269df812046c2f3e4d97185a9312/dbeed771e6b44017b84c944fd0845679f682269df812046c2f3e4d97185a9312-json.log
 
 NOTE NORMALLY YOU JUST UPDATE WORDPRESS VIA ITS WEBINTERFACE mu.openstate.eu/wp-admin INSTEAD OF USING ALL THE STEPS BELOW. These steps are required though if you want to change `wp-config.php`.
-- Update WordPress version using Docker, first change the WordPress version in `Dockerfile_app`:
+- Update WordPress using Docker
   ```
-  docker-compose build app
+  docker-compose build --pull app
   docker-compose down
   docker volume rm wordpress_app_volume
   docker-compose up -d
   ```
   NB: `wordpress_app_volume` needs to be removed because the WordPress Docker image only regenerates its files (and thus its version) if it doesn't detect its files (which are the only files that are stored in this volume and is thus safe to remove)
 
-- Update one container, e.g. Nginx:
+- Update PHP
   ```
-  docker-compose up -d --no-deps --build nginx
+  docker-compose build --pull app
+  docker-compose up -d
   ```
 
-- Enter MySQL database:
+- Update Nginx
+  ```
+  docker-compose build --pull nginx
+  docker-compose up -d
+  ```
+
+- Enter MySQL database
   ```
   docker run -it --rm --network wordpress_network mysql bash
   mysql -h wordpress_mysql_1 -u <DB_USER> -p

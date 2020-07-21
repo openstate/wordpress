@@ -1,4 +1,4 @@
-FROM wordpress:5.2.4-php7.3-fpm
+FROM wordpress:php7.4-fpm
 MAINTAINER Open State Foundation <developers@openstate.eu>
 
 RUN echo "Europe/Amsterdam" > /etc/timezone \
