@@ -49,7 +49,7 @@ services:
     networks:
       - network
   mysql:
-    image: mysql:5.7.25
+    image: mysql:5.7
     secrets:
       - db_name
       - db_user

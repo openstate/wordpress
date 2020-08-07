@@ -164,6 +164,11 @@ NOTE NORMALLY YOU JUST UPDATE WORDPRESS VIA ITS WEBINTERFACE mu.openstate.eu/wp-
   docker-compose up -d
   ```
 
+- Update MySQL
+  ```
+  docker-compose up -d
+  ```
+
 - Enter MySQL database
   ```
   docker run -it --rm --network wordpress_network mysql bash
