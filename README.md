@@ -155,18 +155,19 @@ NOTE NORMALLY YOU JUST UPDATE WORDPRESS VIA ITS WEBINTERFACE mu.openstate.eu/wp-
 - Update PHP
   ```
   docker-compose build --pull app
-  docker-compose up -d
+  docker-compose up -d app
   ```
 
 - Update Nginx
   ```
   docker-compose build --pull nginx
-  docker-compose up -d
+  docker-compose up -d nginx
   ```
 
 - Update MySQL
   ```
-  docker-compose up -d
+  docker-compose pull mysql
+  docker-compose up -d mysql
   ```
 
 - Enter MySQL database
