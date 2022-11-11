@@ -50,7 +50,7 @@ We use Docker to create Nginx, WordPress and MySQL containers.
   NOTE: if you're developing on a Mac, edit the `sendfile` option in `docker/nginx/nginx.conf` as described there
   ```
   cd docker
-  docker-compose -f docker-compose.yml -f docker-compose-dev.yml start
+  docker-compose -f docker-compose.yml -f docker-compose-dev.yml up -d
   ```
 - When you just installed without importing an existing database
   - Run `docker-compose logs` and look for the line with 'GENERATED ROOT PASSWORD:' to find the randomly generated root database password and save it somewhere safe
