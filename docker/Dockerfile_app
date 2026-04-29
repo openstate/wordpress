@@ -1,4 +1,4 @@
-FROM wordpress:php7.4-fpm
+FROM wordpress:php8.3-fpm
 MAINTAINER Open State Foundation <developers@openstate.eu>
 
 RUN echo "Europe/Amsterdam" > /etc/timezone \
@@ -17,6 +17,9 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
 
 # Not sure if this is needed as the PHP-FPM to Nginx communication over sockets also works without this
 RUN docker-php-ext-install sockets
+
+# Needed for CiviCRM
+RUN pecl install psr-1.2.0 && docker-php-ext-enable psr
 
 # Create the same user in the PHP-FPM and Nginx containers in order to connect via a socket
 RUN adduser --uid 3000 --system --group --disabled-login --disabled-password app

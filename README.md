@@ -22,6 +22,7 @@ We use Docker to create Nginx, WordPress and MySQL containers.
 - Copy `docker/msmtprc.default` to `docker/msmtprc` and fill in the values for `host`, `user` and `password`
 - In the `docker` directory create the files `secrets_db_name.txt`, `secrets_db_user.txt` and `secrets_db_password.txt` and add the database name, user and password (either new values if starting from scratch or existing if importing a database) on the first line of their corresponding file
 - Copy `docker/backup.sh.default` to `docker/backup.sh` and change `<DB_USER>` and `<DB_PASSWORD>` to the same values as filled in above
+- Create a `.htpasswd` file in `docker/nginx/conf.d` (or copy it from another location)
 - When importing an existing database (e.g. for local development or when migrating to another server)
   - Copy the latest MySQL backup from `docker/docker-entrypoint-initdb.d/backups` to `docker/docker-entrypoint-initdb.d` to import the database
 - Production
@@ -32,7 +33,7 @@ We use Docker to create Nginx, WordPress and MySQL containers.
   docker-compose up -d
   ```
 - Development
-  - (optional when not using nginx-load-balancer in development) Edit docker/docker-compose-dev.yml and uncomment the section under `nginx` listing the ports
+  - (optional when not using nginx-load-balancer in development) Edit `docker/docker-compose-dev.yml` and uncomment the section under `nginx` listing the ports
   - If you want to enable debugging follow these steps
     - uncomment the lines containing `WORDPRESS_DEBUG` in `docker/docker-compose-dev.yml`
     - uncomment the debug sections in `Dockerfile_app`
