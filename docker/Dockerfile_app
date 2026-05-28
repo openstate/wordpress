@@ -15,14 +15,8 @@ RUN cd /usr/local/bin && wget https://raw.githubusercontent.com/composer/getcomp
 # Install WP-CLI
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
 
-# Not sure if this is needed as the PHP-FPM to Nginx communication over sockets also works without this
-RUN docker-php-ext-install sockets
-
 # Needed for CiviCRM
 RUN pecl install psr-1.2.0 && docker-php-ext-enable psr
-
-# Create the same user in the PHP-FPM and Nginx containers in order to connect via a socket
-RUN adduser --uid 3000 --system --group --disabled-login --disabled-password app
 
 ADD msmtprc /etc/msmtprc
 
@@ -32,13 +26,6 @@ RUN sed -i 's/pm.max_children = 5/pm.max_children = 20/' /usr/local/etc/php-fpm.
 RUN sed -i 's/pm.start_servers = 2/pm.start_servers = 3/' /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 2/' /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 5/' /usr/local/etc/php-fpm.d/www.conf
-
-# Use socket instead of TCP
-RUN sed -i 's/listen = 127.0.0.1:9000/listen = \/socket\/docker.sock/' /usr/local/etc/php-fpm.d/www.conf
-RUN sed -i 's/;listen.owner = www-data/listen.owner = app/' /usr/local/etc/php-fpm.d/www.conf
-RUN sed -i 's/;listen.group = www-data/listen.group = app/' /usr/local/etc/php-fpm.d/www.conf
-# Comment this line as it overrides the socket back to TCP again
-RUN sed -i 's/listen = 9000/;listen = 9000/' /usr/local/etc/php-fpm.d/zz-docker.conf
 
 RUN echo 'upload_max_filesize = 200M' >> /usr/local/etc/php/php.ini
 RUN echo 'post_max_size = 200M' >> /usr/local/etc/php/php.ini
