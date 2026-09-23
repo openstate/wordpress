@@ -19,6 +19,8 @@ services:
       - db_name
       - db_user
       - db_password
+      - cap_key
+      - mailchimp_key
     environment:
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_NAME_FILE: /run/secrets/db_name
@@ -37,6 +39,11 @@ services:
         define('WPMS_MAIL_FROM', 'developers@openstate.eu');
         define('WPMS_MAIL_FROM_NAME', 'Open State Foundation developers');
         define('WPMS_MAILER', 'mail');
+        define('OPEN_STATE_CAP_INSTANCE_URL', 'https://capjs.openstate.eu');
+        define('OPEN_STATE_CAP_SITE_KEY', 'eb05ecc0a0');
+        define('OPEN_STATE_CAP_SECRET_KEY', file_get_contents('/run/secrets/cap_key'));
+        define('OPEN_STATE_MAILCHIMP_API_KEY', file_get_contents('/run/secrets/mailchimp_key'));
+        define('OPEN_STATE_MAILCHIMP_LIST_ID', 'a9619e4f3e');
     volumes:
       - app_volume:/var/www/html
       - ../wp-content/:/var/www/html/wp-content/
@@ -67,6 +74,10 @@ secrets:
     file: ./secrets_db_user.txt
   db_password:
     file: ./secrets_db_password.txt
+  cap_key:
+    file: ./secrets_cap_key.txt
+  mailchimp_key:
+    file: ./secrets_mailchimp_key.txt
 volumes:
   app_volume:
   mysql_volume:
