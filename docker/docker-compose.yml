@@ -26,6 +26,8 @@ services:
       WORDPRESS_DB_NAME_FILE: /run/secrets/db_name
       WORDPRESS_DB_USER_FILE: /run/secrets/db_user
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
+      CAP_SECRET_KEY_FILE: /run/secrets/cap_key
+      MAILCHIMP_SECRET_KEY_FILE: /run/secrets/mailchimp_key
       WORDPRESS_CONFIG_EXTRA: |
         /* Multisite */
         define('WP_ALLOW_MULTISITE', true );
@@ -41,8 +43,8 @@ services:
         define('WPMS_MAILER', 'mail');
         define('OPEN_STATE_CAP_INSTANCE_URL', 'https://capjs.openstate.eu');
         define('OPEN_STATE_CAP_SITE_KEY', 'eb05ecc0a0');
-        define('OPEN_STATE_CAP_SECRET_KEY', file_get_contents('/run/secrets/cap_key'));
-        define('OPEN_STATE_MAILCHIMP_API_KEY', file_get_contents('/run/secrets/mailchimp_key'));
+        define('OPEN_STATE_CAP_SECRET_KEY', getenv_docker('CAP_SECRET_KEY', ''));
+        define('OPEN_STATE_MAILCHIMP_API_KEY', getenv_docker('MAILCHIMP_SECRET_KEY', ''));
         define('OPEN_STATE_MAILCHIMP_LIST_ID', 'a9619e4f3e');
     volumes:
       - app_volume:/var/www/html
